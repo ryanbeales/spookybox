@@ -1,30 +1,52 @@
 import pigpio
 import RPi.GPIO as GPIO
-import time
 
 import logging
 logger = logging.getLogger(__name__)
 
 import threading, queue
 
+# Add logging to this one.
 class Servo():
-    def __init__(self, pin, min_angle=-90, max_angle=90, min_pulse_width=500, max_pulse_width=2500):
+    def __init__(self, pin, min_angle=-90, max_angle=90, min_pulse_width=500, max_pulse_width=2500, movement_delay=0.5):
         self.pin = pin
         self.min_angle=min_angle
         self.max_angle=max_angle
         self.min_pulse_width=min_pulse_width
         self.max_pulse_width=max_pulse_width
+        self.movement_delay=movement_delay
 
         self.pwm = pigpio.pi()
         self.pwm.set_mode(pin, pigpio.OUTPUT)
+        logger.debug(f"New servo on GPIO pin {self.pin}")
+        self.timerthread = None
+
+        logging.debug("Starting servo worker thread")
+        self.q = queue.Queue()
+        threading.Thread(target=self.worker, daemon=True, name=f"Servo-{self.pin}-Worker").start()
+
         
     # Specify a fractional distance instead of an absolute angle
     def set_fraction(self, fraction, minimum=-30, maximum=30):
         angle = (maximum - minimum) * fraction
         self.set_angle(angle)
 
-    # Move Servo to desired angle
+    def calculate_pulse_width(self, angle):
+        angle_range = float(self.max_angle - self.min_angle)
+        fractional = (angle + angle_range/2) / angle_range
+        pulse_width = (fractional * (2500 - 500)) + 500
+        return int(pulse_width)
+
+
     def set_angle(self, angle):
+        logger.debug(f"set_angle {angle} for serve0 {self.pin}")
+        self.q.put(angle)
+
+    # Move Servo to desired angle
+    def _set_angle(self, angle):
+        if self.timerthread:
+            self.timerthread.cancel()
+
         # Turn on PWM on servo pin
         self.pwm.set_PWM_frequency(self.pin, 50)
         
@@ -35,36 +57,30 @@ class Servo():
             angle = self.min_angle
 
         # Work out the pulse width based on the angle
-        pulsewidth = int(((angle / (self.max_angle - self.min_angle)) * (self.max_pulse_width - self.min_pulse_width)) + self.min_pulse_width)
+        pulsewidth = self.calculate_pulse_width(angle)
         
-        # TODO: change to logging package.
-        print(f"angle = {angle}, max_angle-min_angle = {self.max_angle-self.min_angle}, pulse_range = {self.max_pulse_width-self.min_pulse_width}, pulsewidth = {pulsewidth}")
+        logger.debug(f"servo = {self.pin}, angle = {angle}, pulsewidth = {pulsewidth}")
         
         # Set the pulse
         self.pwm.set_servo_pulsewidth(self.pin, pulsewidth)
+        self.timerthread = threading.Timer(2, self.turn_off_pwm)
+        self.timerthread.start()
+        self.timerthread.name = f"Servo-{self.pin}-StopTimer"
 
-        # Wait for servo to move
-        # TODO: Change this to a fractional sleep based on the amount moved.
-        time.sleep(0.5)
-
-        # Turn servos off to reduce idle jitter
+    def turn_off_pwm(self):
+        logger.debug(f'Turning off PWM on pin {self.pin}')
         self.pwm.set_PWM_dutycycle(self.pin,0)
         self.pwm.set_PWM_frequency(self.pin,0)
-
-
-class ThreadingServo(Servo):
-    q = queue.Queue()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        logging.debug("Starting servo worker thread")
-        threading.Thread(target=self.worker, daemon=True).start()
-
-    def set_angle(self, angle):
-        self.q.put(angle)
+        self.stop_event = None
 
     def worker(self):
         while True:
-            angle = self.q.get()
-            self.set_angle(angle)
-            self.q.task_done()
+            logger.debug('Waiting for queued message')
+            try:
+                angle = self.q.get(block=True, timeout=10)
+                logger.debug(f'Recieved {angle} from queue, setting it')
+                self._set_angle(angle)
+                logger.debug('Queued task done')
+                self.q.task_done()
+            except queue.Empty:
+                logger.debug('Queue was empty, retrying.')
