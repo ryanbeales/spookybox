@@ -2,6 +2,7 @@ import cv2
 
 import logging
 import threading, queue
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -36,13 +37,13 @@ def capture_loop():
              # If something is found, it's a set of (x,y,w,h)
              x = o[0]
              logger.debug(f"Found an object: x = {x}, image_width = {image_width}")
-             
+            
     finally:
         logger.info('Closing Video Capture')
         cap.release()
 
 def threading_capture_loop():
-    threading.Thread(target=capture_loop, daemon=True).start()
+    threading.Thread(target=capture_loop, daemon=True, name="MotionDetection").start()
 
 if __name__ == '__main__':
     capture_loop()
