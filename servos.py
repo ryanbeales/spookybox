@@ -8,13 +8,14 @@ import threading, queue
 
 # Add logging to this one.
 class Servo():
-    def __init__(self, pin, min_angle=-90, max_angle=90, min_pulse_width=500, max_pulse_width=2500, movement_delay=0.5):
+    def __init__(self, pin, min_angle=-90, max_angle=90, offset=0, min_pulse_width=500, max_pulse_width=2500, movement_delay=0.5):
         self.pin = pin
         self.min_angle=min_angle
         self.max_angle=max_angle
         self.min_pulse_width=min_pulse_width
         self.max_pulse_width=max_pulse_width
         self.movement_delay=movement_delay
+        self.offset = offset
 
         self.pwm = pigpio.pi()
         self.pwm.set_mode(pin, pigpio.OUTPUT)
@@ -40,7 +41,7 @@ class Servo():
 
     def set_angle(self, angle):
         logger.debug(f"set_angle {angle} for serve0 {self.pin}")
-        self.q.put(angle)
+        self.q.put(angle + self.offset)
 
     # Move Servo to desired angle
     def _set_angle(self, angle):
