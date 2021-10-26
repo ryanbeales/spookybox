@@ -14,18 +14,19 @@ if __name__ == "__main__":
     )
     logger = logging.getLogger(__name__)
 
-    logger.debug('Start motion detection')
-    motiondetect.threading_capture_loop()
-
     Lid = Servo(17, min_pulse_width=1/1000.0, max_pulse_width=2/1000.0),
     LeftEye = Servo(27)
-    RightEye = Servo(23)
+    RightEye = Servo(23, offset=-10)
+
+    def detection_callback(x, w, size):
+        logger.debug(f"Motion Detected: x = {x}, w = {w}, size = {size}")
+        fractional = (x + w/2) / size
+        LeftEye.set_fraction(fractional)
+        RightEye.set_fraction(fractional)
+
+    logger.debug('Start motion detection')
+    m = motiondetect.MotionDetection(detection_callback=detection_callback)
 
     while True:
-        logger.debug('Move Servo')
-        LeftEye.set_fraction(0)
-        RightEye.set_fraction(0)
-        time.sleep(5)
-        LeftEye.set_fraction(1)
-        RightEye.set_fraction(1)
-        time.sleep(5)
+        logger.debug('sleeping main thread')
+        time.sleep(60)
