@@ -21,8 +21,8 @@ if __name__ == "__main__":
     def detection_callback(x, w, size):
         logger.debug(f"Motion Detected: x = {x}, w = {w}, size = {size}")
         fractional = (x + w/2) / size
-        LeftEye.set_fraction(fractional)
-        RightEye.set_fraction(fractional)
+        LeftEye.set_fraction(1-fractional)
+        RightEye.set_fraction(1-fractional)
 
     logger.debug('Start motion detection')
     m = motiondetect.MotionDetection(detection_callback=detection_callback)
