@@ -40,7 +40,7 @@ class Servo():
 
 
     def set_angle(self, angle):
-        logger.debug(f"set_angle {angle} for serve0 {self.pin}")
+        logger.debug(f"set_angle {angle} for servo {self.pin}")
         self.q.put(angle + self.offset)
 
     # Move Servo to desired angle
