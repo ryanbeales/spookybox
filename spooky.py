@@ -58,7 +58,7 @@ if __name__ == "__main__":
         RightEye.set_fraction(1-fractional)
 
     logger.debug('Start motion detection')
-    m = MotionDetection(detection_callback=detection_callback, output_file='output.avi')
+    m = MotionDetection(detection_callback=detection_callback)
 
     # Idle our main thread. Need to do something better here.
     while True:

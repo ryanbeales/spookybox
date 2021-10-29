@@ -1,0 +1,17 @@
+[Unit]
+Description=SpookyBox
+After=pigpiod.service
+After=systemd-user-sessions.service
+After=rc-local.service
+Before=getty.target
+
+[Service]
+WorkingDirectory=/home/pi/src/spookybox
+ExecStart=/usr/bin/python3 /home/pi/src/spookybox/spooky.py
+Type=simple
+Restart=always
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target
