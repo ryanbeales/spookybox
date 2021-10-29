@@ -1,4 +1,3 @@
 gpiozero
 opencv-contrib-python-headless
 python3-h5py
-flask
