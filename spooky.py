@@ -48,6 +48,9 @@ if __name__ == "__main__":
         if (w/size) < 0.2:
             logger.debug('Movement detected is not large enough, ignoring')
             return
+        if (w/size) > 0.95:
+            logger.debug('Movement is almost full frame width, most likely vibrations, ignoring')
+            return
 
         # Open the lid
         Lid.open()
