@@ -17,4 +17,5 @@ def handle_message(data):
     verticalservo.set_fraction(data[1]/data[3], minimum=-45, maximum=45)
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0')
+    # Bind to all addresses, allow to start via systemd
+    socketio.run(app, host='0.0.0.0', allow_unsafe_werkzeug=True)
