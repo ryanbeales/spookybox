@@ -104,12 +104,14 @@ function drawFaceDot(pose) {
     // Shift first element to last, remove the last element, then add our current box coords to the end
     lastdots.shift()
     lastdots.pop()
-    lastdots.push([box.minx,box.miny])
+    lastdots.push([box.minx|0,box.miny|0])
   }
   // Draw a 4x4 dot on the last known position, we can use the same location to aim later
-  console.log(lastdots[-1]);
   renderedcontext.fillStyle = "#FF0000";
   renderedcontext.fillRect(lastdots[lastdots.length-1][0], lastdots[lastdots.length-1][1], 4, 4);  
+
+  // Emits every frame. We want to slow this down a little.  
+  socket.emit('faceposition', lastdots[lastdots.length-1])
 }
 
 
@@ -162,6 +164,9 @@ function renderVideo(timestamp) {
 
 
 async function start_spookystream() {
+  // Init socket.io
+  socket.on('connect', function() { socket.emit('event', {'data': "Connected!"})})
+
   // Init pose detection
   await initPoseDetection();
 
