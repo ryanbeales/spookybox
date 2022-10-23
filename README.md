@@ -11,7 +11,7 @@ These are my rough notes so I remember what to do for Halloween 2022.
 1. Acquire a box, of the exact same dimensions... Like I said, these are my notes.
 1. Git clone this in to /home/pi/src/
 1. Run `system_packages.sh` to install everything. Curse when it doens't work or I've forgotten something.
-1. `pip -r requirements.txt `
+1. `pip install -r requirements.txt `
 1. Copy service files in services/ to /etc/systemd/system/
 1. `systemctl daemon-reload`
 1. `systemctl enable pigpiod; systemctl start pigpiod`

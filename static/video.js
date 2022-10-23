@@ -1,3 +1,5 @@
+var socket = io()
+
 window.onload = () => {
     start_spookystream();
 }
