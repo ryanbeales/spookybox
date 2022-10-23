@@ -110,8 +110,10 @@ function drawFaceDot(pose) {
   renderedcontext.fillStyle = "#FF0000";
   renderedcontext.fillRect(lastdots[lastdots.length-1][0], lastdots[lastdots.length-1][1], 4, 4);  
 
-  // Emits every frame. We want to slow this down a little.  
-  socket.emit('faceposition', lastdots[lastdots.length-1])
+  // Emits every frame. We want to slow this down a little.
+  // We might want to add smoothing on this side too.
+  // message format is [current x, current y, max x, max y].
+  socket.emit('faceposition', [lastdots[lastdots.length-1][0], lastdots[lastdots.length-1][1], renderedcanvas.width, renderedcanvas.height)
 }
 
 

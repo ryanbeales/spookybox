@@ -1,3 +1,0 @@
-
-  Need this https://github.com/tensorflow/tfjs-models/blob/master/pose-detection/demos/live_video/src/index.js
-  And then look for item 0 which is the nose. Or anything on the face... 
