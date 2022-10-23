@@ -12,8 +12,6 @@ verticalservo = Servo(27)
 
 @socketio.on('faceposition')
 def handle_message(data):
-    print(f'face: x={data[0]} y={data[1]} maxx={data[2]} maxy={data[3]}')
-
     # Move eyes
     horizontalservo.set_fraction((data[2]-data[0])/data[2], minimum=-45, maximum=30)
     verticalservo.set_fraction(data[1]/data[3], minimum=-45, maximum=45)
