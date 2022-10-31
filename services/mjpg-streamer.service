@@ -1,13 +1,13 @@
 [Unit]
-Description=SpookyBox
+Description=mjpg-streamer
 After=pigpiod.service
 After=systemd-user-sessions.service
 After=rc-local.service
 Before=getty.target
 
 [Service]
-WorkingDirectory=/home/pi/src/spookybox
-ExecStart=/usr/bin/python3 /home/pi/src/spookybox/server.py
+WorkingDirectory=/home/pi/src/spookybox/mjpg-streamer
+ExecStart=/home/pi/src/spookybox/mjpg-streamer/mjpg-streamer.sh
 Type=simple
 Restart=always
 User=pi
