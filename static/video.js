@@ -56,12 +56,15 @@ function getFaceRectangle(pose) {
 
   // This is somewhat slow?
   //faceCoords = pose.keypoints.filter(p => facepositionnames.includes(p.name) && p.score > 0.6 )
+  
+  // If no poses are found return null (And don't log to the console that it's undefined.
+  if ( pose === null || pose === undefined) return null;
 
   // To make it faster include the below loop
   faceCoords = []
   for (let i = 0; i < 5; i++) {
     if (pose.keypoints[i].score > 0.6) {
-      faceCoords.push(pose.keypoints[i])
+      faceCoords.push(pose.keypoints[i]) 
     }
   }
 
