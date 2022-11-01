@@ -4,6 +4,7 @@ It's a spooky box version 2! For 2022 it's in a pumpkin! So not really a box. Ve
 This is some face tracking which is then used as an input to drive some servos that direct some fake plastic eyeballs to follow people around. All this to hopefully spook our Halloween vistors. Success rate so far is about 10% of kids spooked in both 2021 and 2022. 2023 plans are already being formed for even more spookyness (add a speaker? maybe put it in a creepy painting?)
 
 Here's a video of it working:
+
 [![spooky pumpkin](https://img.youtube.com/vi/4IoE-7YXh3c/0.jpg)](https://www.youtube.com/shorts/4IoE-7YXh3c)
 
 
@@ -39,12 +40,15 @@ Maybe this diagram might help? Maybe it just makes things more confusing.
 # Assembly photos
 
 Fully assembled parts:
+
 ![diagram](docs/fullyassembled.jpg)
 
 Mounted inside the pumpkin using two metal rods to suspend everything above the pumpkin and it's juices:
+
 ![diagram](docs/inside_pumpkin.jpg)
 
 View of outside of the pumpkin:
+
 ![diagram](docs/outside_pumpkin.jpg)
 
 
