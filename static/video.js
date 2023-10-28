@@ -95,9 +95,8 @@ function drawFaceRectangle(pose) {
   }
 }
 
-// Will be similar to eye aiming function
-let lastdots = [[0,0],[0,0],[0,0],[0,0],[0,0]]
-let lidposition = 0
+// Create an array containing the last 30 positions, we'll use this to create some smoothing
+let lastdots = Array(30).fill([0,0])
 
 function drawFaceDot(pose) {
   // Find the face in the image
@@ -105,9 +104,8 @@ function drawFaceDot(pose) {
 
   // If a face is found
   if (box) {
-    // Shift first element to last, remove the last element, then add our current box coords to the end
+    // Shift removes the first element, then add our current box coords to the end
     lastdots.shift()
-    lastdots.pop()
     lastdots.push([box.minx|0,box.miny|0])
   }
   // Draw a 4x4 dot on the last known position, we can use the same location to aim later
@@ -163,7 +161,9 @@ function renderVideo(timestamp) {
     requestAnimationFrame(renderVideo)
   }
 
+//
 // Manual controls
+//
 const controlsEnabled = document.querySelector('#controlsEnabled');
 const verticalSlider = document.querySelector('#verticalSlider');
 const horizontalSlider = document.querySelector('#horizontalSlider');
@@ -171,16 +171,38 @@ const lidSlider = document.querySelector('#lidSlider');
 
 
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
+let lidPosition = 1.0 // closed by default
 
+function lidBehaviour() {
+  // Create an array of x,y diffs
+  let movementValues = lastdots.map((curr, index, array) => {
+    // Skip the first element, since it will be garbage
+    if (index > 0) {
+      var diffx = array[index-1][0] - array[index][0]
+      var diffy = array[index-1][1] - array[index][1]
+      
+      // Pythagoras! 
+      distance = Math.sqrt(Math.pow(diffx + diffy, 2))
+
+      return distance
+    }
+  })
+
+  console.log(movementValues)
+}
+
+//
+// Send the locations to spookybox
+//
 function sendToSpookyBox() {
   // Called on a timer.
   // message format is [x, y, lidposition].
   // where each value is a number between 0 and 1 representing the fraction of the total
   // amount of movement the servo has.
 
-  var locationx = 0.0
-  var locationy = 0.0
-  var lid = 0.0
+  var locationx = 0.0 // 1.0 is right, 0.0 is left from the boxes point of view
+  var locationy = 0.0 // 0.0 is up, 1.0 is down
+  var lid = 1.0 // 1.0 is closed, 0.0 is open.
 
   if (controlsEnabled.checked == true) {
     locationx = 1.0 - (horizontalSlider.value / (horizontalSlider.max * 1.0))
@@ -193,7 +215,10 @@ function sendToSpookyBox() {
     lid = lidposition
   }
 
-  socket.emit('faceposition', [locationx, locationy, lid])
+  // Don't bother moving the servos if the lid is closed
+  if (lid < 1.0) {
+    socket.emit('faceposition', [locationx, locationy, lid])
+  }
 }
   
 
@@ -219,4 +244,6 @@ async function start_spookystream() {
 
   // Update spookybox 10 times a second
   setInterval(sendToSpookyBox, 100)
+  // Check our lid behaviour 10 times a second
+  setInterval(lidBehaviour, 100)
 }
