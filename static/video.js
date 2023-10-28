@@ -98,6 +98,7 @@ function drawFaceRectangle(pose) {
 // Will be similar to eye aiming function
 let lastdots = [[0,0],[0,0],[0,0],[0,0],[0,0]]
 let lidposition = 0
+let lidrate = 0.01
 
 function drawFaceDot(pose) {
   // Find the face in the image
@@ -113,6 +114,15 @@ function drawFaceDot(pose) {
   // Draw a 4x4 dot on the last known position, we can use the same location to aim later
   renderedcontext.fillStyle = "#FF0000";
   renderedcontext.fillRect(lastdots[lastdots.length-1][0], lastdots[lastdots.length-1][1], 4, 4);  
+
+
+  lidposition = lidposition + lidrate
+  if (lidposition >= 1.0) {
+    lidrate = -0.01
+  } 
+  if (lidposition >= 0) {
+    lidrate = 0.01
+  }
 
   // Emits every frame. We want to slow this down a little.
   // We might want to add smoothing on this side too.
