@@ -190,12 +190,12 @@ function lidBehaviour() {
   movementValues.shift();
   movements = movementValues.reduce((prev, curr) => prev+curr)
 
-  if (movements < 10) {
-    lidposition = 1.0
+  if (movements < 15) {
+    lidposition = 1.0 // closed
   } else if (movements > 60) {
-    lidposition = 0.0
+    lidposition = 0.0 // full open
   } else {
-    lidposition = 0.5
+    lidposition = 0.5 // half open
   }
 }
 
