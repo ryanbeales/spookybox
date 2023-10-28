@@ -19,7 +19,7 @@ def handle_message(data):
     lidposition = data[2]
 
     # Move eyes
-    horizontalservo.set_fraction(current_X, minimum=-45, maximum=30)
+    horizontalservo.set_fraction(current_X, minimum=-36, maximum=30)
     verticalservo.set_fraction(current_Y, minimum=-45, maximum=45)
     # Open=-60, closed=20
     lidservo.set_fraction(lidposition, minimum=-60, maximum=20)
