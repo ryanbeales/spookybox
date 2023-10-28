@@ -7,15 +7,15 @@
 
         <title>SpookyBoxPi</title>
 
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.8.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.12.0"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     </head>
 
     <body id="body">
         <canvas id="renderedcanvas"></canvas>
 
-        <img id="spookystream" src="http://10.0.0.53:8080/?action=stream" crossorigin="anonymous" hidden />
+        <img id="spookystream" src="http://10.0.0.52:8080/?action=stream" crossorigin="anonymous" hidden />
 
         <script src="video.js"></script>
     </body>
