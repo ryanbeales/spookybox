@@ -171,7 +171,7 @@ const lidSlider = document.querySelector('#lidSlider');
 
 
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
-let lidPosition = 1.0 // closed by default
+let lidposition = 1.0 // closed by default
 
 function lidBehaviour() {
   // Create an array of x,y diffs
@@ -190,7 +190,13 @@ function lidBehaviour() {
   movementValues.shift();
   movements = movementValues.reduce((prev, curr) => prev+curr)
 
-  console.log(movements);
+  if (movements < 10) {
+    lidposition = 1.0
+  } else if (movements > 60) {
+    lidposition = 0.0
+  } else {
+    lidposition = 0.5
+  }
 }
 
 //
