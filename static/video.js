@@ -166,7 +166,7 @@ function renderVideo(timestamp) {
 // Manual controls
 const controlsEnabled = document.querySelector('#controlsEnabled');
 const verticalSlider = document.querySelector('#verticalSlider');
-const horizontalSlider = docment.querySelector('#horizontalSlider');
+const horizontalSlider = document.querySelector('#horizontalSlider');
 const lidSlider = document.querySelector('#lidSlider');
 
 
