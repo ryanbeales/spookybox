@@ -97,6 +97,7 @@ function drawFaceRectangle(pose) {
 
 // Will be similar to eye aiming function
 let lastdots = [[0,0],[0,0],[0,0],[0,0],[0,0]]
+let lidposition = 0
 
 function drawFaceDot(pose) {
   // Find the face in the image
@@ -115,8 +116,8 @@ function drawFaceDot(pose) {
 
   // Emits every frame. We want to slow this down a little.
   // We might want to add smoothing on this side too.
-  // message format is [current x, current y, max x, max y].
-  socket.emit('faceposition', [lastdots[lastdots.length-1][0], lastdots[lastdots.length-1][1], renderedcanvas.width, renderedcanvas.height])
+  // message format is [current x, current y, max x, max y, lidposition].
+  socket.emit('faceposition', [lastdots[lastdots.length-1][0], lastdots[lastdots.length-1][1], renderedcanvas.width, renderedcanvas.height, lidposition])
 }
 
 
