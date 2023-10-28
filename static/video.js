@@ -98,8 +98,6 @@ function drawFaceRectangle(pose) {
 // Will be similar to eye aiming function
 let lastdots = [[0,0],[0,0],[0,0],[0,0],[0,0]]
 let lidposition = 0
-let lidrate = 0.01
-
 
 function drawFaceDot(pose) {
   // Find the face in the image
@@ -165,15 +163,39 @@ function renderVideo(timestamp) {
     requestAnimationFrame(renderVideo)
   }
 
-  
-  function sendToSpookyBox() {
-    // Called on a timer.
-    // We might want to add smoothing on this side too.
-    // message format is [current x, current y, max x, max y, lidposition].
-    socket.emit('faceposition', [lastdots[lastdots.length-1][0], lastdots[lastdots.length-1][1], renderedcanvas.width, renderedcanvas.height, lidposition])
-  }
-  
+// Manual controls
+const controlsEnabled = document.querySelector('#controlsEnabled');
+const verticalSlider = document.querySelector('#verticalSlider');
+const horizontalSlider = docment.querySelector('#horizontalSlider');
+const lidSlider = document.querySelector('#lidSlider');
 
+
+// Detect when there is movement, then open the lid, setTimeout to close the lid again.
+
+function sendToSpookyBox() {
+  // Called on a timer.
+  // message format is [x, y, lidposition].
+  // where each value is a number between 0 and 1 representing the fraction of the total
+  // amount of movement the servo has.
+
+  var locationx = 0.0
+  var locationy = 0.0
+  var lid = 0.0
+
+  if (controlsEnabled.checked == true) {
+    locationx = 1.0 - (horizontalSlider.value / (horizontalSlider.max * 1.0))
+    locationy = verticalSlider.value / (verticalSlider.max * 1.0)
+    lid = lidSlider.value / (lidSlider.max * 1.0)
+  } else {
+    // X is reversed, Y is not
+    locationx = (renderedcanvas.width - lastdots[lastdots.length-1][0]) / renderedcanvas.width
+    locationy = lastdots[lastdots.length-1][1] / renderedcanvas.height
+    lid = lidposition
+  }
+
+  socket.emit('faceposition', [locationx, locationy, lid])
+}
+  
 
 async function start_spookystream() {
   // Init socket.io
@@ -195,6 +217,6 @@ async function start_spookystream() {
   // Trigger the start of processing.
   renderVideo();
 
-  // Update spookybox once a second
-  setInterval(sendToSpookyBox, 1000)
+  // Update spookybox 10 times a second
+  setInterval(sendToSpookyBox, 100)
 }

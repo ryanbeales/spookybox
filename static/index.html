@@ -17,6 +17,15 @@
 
         <img id="spookystream" src="http://10.0.0.52:8080/?action=stream" crossorigin="anonymous" hidden />
 
+        <input type="checkbox" id="controlsEnabled" name="controlsEnabled" value="Manual Control">
+        <label for="controlsEnabled">Manual Controls</label><br>
+        <input type="range" id="horizontalSlider" name="horizontalSlider" min="0" max="100">
+        <label for="horizontalSlider">Horizontal</label><br>
+        <input type="range" id="verticalSlider" name="verticalSlider" min="0" max="100">
+        <label for="verticalSlider">Vertical</label><br>
+        <input type="range" id="lidSlider" name="lidSlider" min="0" max="100">
+        <label for="lidSlider">Lid</label><br>
+
         <script src="video.js"></script>
     </body>
   </html>

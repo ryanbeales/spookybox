@@ -16,13 +16,11 @@ def handle_message(data):
     #message format is [current x, current y, max x, max y, lidposition].
     current_X = data[0]
     current_Y = data[1]
-    max_X = data[2]
-    max_Y = data[3]
-    lidposition = data[4]
+    lidposition = data[2]
 
     # Move eyes
-    horizontalservo.set_fraction((max_X-current_X)/max_X, minimum=-45, maximum=30)
-    verticalservo.set_fraction(current_Y/max_Y, minimum=-45, maximum=45)
+    horizontalservo.set_fraction(current_X, minimum=-45, maximum=30)
+    verticalservo.set_fraction(current_Y, minimum=-45, maximum=45)
     # Open=-60, closed=20
     lidservo.set_fraction(lidposition, minimum=-60, maximum=20)
 
