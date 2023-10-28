@@ -178,17 +178,19 @@ function lidBehaviour() {
   let movementValues = lastdots.map((curr, index, array) => {
     // Skip the first element, since it will be garbage
     if (index > 0) {
-      var diffx = array[index-1][0] - array[index][0]
-      var diffy = array[index-1][1] - array[index][1]
+      var diffx = array[index-1][0] - array[index][0];
+      var diffy = array[index-1][1] - array[index][1];
       
       // Pythagoras! 
-      distance = Math.sqrt(Math.pow(diffx + diffy, 2))
+      distance = Math.sqrt(Math.pow(diffx + diffy, 2));
 
-      return distance
+      return distance;
     }
-  })
+  });
+  movementValues.shift();
+  movements = movementValues.reduce((prev, curr) => prev+curr)
 
-  console.log(movementValues)
+  console.log(movements);
 }
 
 //
