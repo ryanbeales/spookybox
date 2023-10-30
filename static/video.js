@@ -178,7 +178,7 @@ const lidLargeMovementThreshold = document.querySelector('#lidLargeMovementThres
 const movementDisplay = document.querySelector('#movementValue');
 
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
-let lidposition = lidServoClose.value // closed by default
+let lidposition = 1.0 // closed by default
 
 function lidBehaviour() {
   // Create an array of x,y diffs from the last 10 frames processed
