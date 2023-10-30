@@ -175,6 +175,7 @@ const lidServoClose = document.querySelector('#lidClose');
 const lidSmallMovementThreshold = document.querySelector('#lidSmallMovementThreshold');
 const lidLargeMovementThreshold = document.querySelector('#lidLargeMovementThreshold');
 
+const movementDisplay = document.querySelector('#movementValue');
 
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
 let lidposition = 1.0 // closed by default
@@ -195,6 +196,8 @@ function lidBehaviour() {
   });
   movementValues.shift();
   movements = movementValues.reduce((prev, curr) => prev+curr);
+
+  movementDisplay.textContent = movements.toString()
 
   if (movements < lidSmallMovementThreshold.value) {
     lidposition = lidServoClose.value/(lidServoClose.max * 1.0)
