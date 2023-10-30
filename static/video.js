@@ -169,6 +169,12 @@ const verticalSlider = document.querySelector('#verticalSlider');
 const horizontalSlider = document.querySelector('#horizontalSlider');
 const lidSlider = document.querySelector('#lidSlider');
 
+const lidServoHalfClose = document.querySelector('#lidServoHalfClose');
+const lidServoClose = document.querySelector('#lidClose');
+
+const lidSmallMovementThreshold = document.querySelector('#lidSmallMovementThreshold');
+const lidLargeMovementThreshold = document.querySelector('#lidLargeMovementThreshold');
+
 
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
 let lidposition = 1.0 // closed by default
@@ -188,14 +194,14 @@ function lidBehaviour() {
     }
   });
   movementValues.shift();
-  movements = movementValues.reduce((prev, curr) => prev+curr)
+  movements = movementValues.reduce((prev, curr) => prev+curr);
 
-  if (movements < 15) {
-    lidposition = 1.0 // closed
-  } else if (movements > 60) {
+  if (movements < lidSmallMovementThreshold.value) {
+    lidposition = lidServoClose.value/(lidServoClose.max * 1.0)
+  } else if (movements > lidLargeMovementThreshold.value) {
     lidposition = 0.0 // full open
   } else {
-    lidposition = 0.5 // half open
+    lidposition = lidServoHalfClose.value/(lidServoHalfClose.max * 1.0)
   }
 }
 
