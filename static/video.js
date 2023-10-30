@@ -102,11 +102,14 @@ function drawFaceDot(pose) {
   // Find the face in the image
   box = getFaceRectangle(pose)
 
+  middlex = box.maxx-box.minx/2 + box.minx
+  middley = box.maxy-box.miny/2 + box.miny
+
   // If a face is found
   if (box) {
     // Shift removes the first element, then add our current box coords to the end
     lastdots.shift()
-    lastdots.push([box.minx|0,box.miny|0])
+    lastdots.push([middlex,middley)
   }
   // Draw a 4x4 dot on the last known position, we can use the same location to aim later
   renderedcontext.fillStyle = "#FF0000";
@@ -178,11 +181,11 @@ const lidLargeMovementThreshold = document.querySelector('#lidLargeMovementThres
 const movementDisplay = document.querySelector('#movementValue');
 
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
-let lidposition = 1.0 // closed by default
+let lidposition = lidServoClose.value // closed by default
 
 function lidBehaviour() {
-  // Create an array of x,y diffs
-  let movementValues = lastdots.map((curr, index, array) => {
+  // Create an array of x,y diffs from the last 10 frames processed
+  let movementValues = lastdots.slice(-10).map((curr, index, array) => {
     // Skip the first element, since it will be garbage
     if (index > 0) {
       var diffx = array[index-1][0] - array[index][0];
