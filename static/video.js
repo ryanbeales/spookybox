@@ -170,7 +170,7 @@ const horizontalSlider = document.querySelector('#horizontalSlider');
 const lidSlider = document.querySelector('#lidSlider');
 
 const lidServoHalfClose = document.querySelector('#lidServoHalfClose');
-const lidServoClose = document.querySelector('#lidClose');
+const lidServoClose = document.querySelector('#lidServoClose');
 
 const lidSmallMovementThreshold = document.querySelector('#lidSmallMovementThreshold');
 const lidLargeMovementThreshold = document.querySelector('#lidLargeMovementThreshold');
