@@ -195,7 +195,8 @@ function lidBehaviour() {
     }
   });
   movementValues.shift();
-  movements = movementValues.reduce((prev, curr) => prev+curr);
+  // Get average of movement values over past 1 second
+  movements = movementValues.reduce((prev, curr) => prev+curr) / movementValues.length;
 
   movementDisplay.textContent = movements.toString()
 
