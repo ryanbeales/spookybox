@@ -229,10 +229,7 @@ function sendToSpookyBox() {
     lid = lidposition
   }
 
-  // Don't bother moving the servos if the lid is closed
-  if (lid < 1.0) {
-    socket.emit('faceposition', [locationx, locationy, lid])
-  }
+  socket.emit('faceposition', [locationx, locationy, lid])
 }
   
 
