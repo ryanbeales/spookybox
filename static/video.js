@@ -109,7 +109,7 @@ function drawFaceDot(pose) {
   if (box) {
     // Shift removes the first element, then add our current box coords to the end
     lastdots.shift()
-    lastdots.push([middlex,middley)
+    lastdots.push([middlex,middley])
   }
   // Draw a 4x4 dot on the last known position, we can use the same location to aim later
   renderedcontext.fillStyle = "#FF0000";
