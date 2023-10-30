@@ -102,14 +102,11 @@ function drawFaceDot(pose) {
   // Find the face in the image
   box = getFaceRectangle(pose)
 
-  middlex = box.maxx-box.minx/2 + box.minx
-  middley = box.maxy-box.miny/2 + box.miny
-
-  // If a face is found
+ // If a face is found
   if (box) {
     // Shift removes the first element, then add our current box coords to the end
     lastdots.shift()
-    lastdots.push([middlex,middley])
+    lastdots.push([box.minx,box.miny])
   }
   // Draw a 4x4 dot on the last known position, we can use the same location to aim later
   renderedcontext.fillStyle = "#FF0000";
@@ -199,7 +196,7 @@ function lidBehaviour() {
   });
   movementValues.shift();
   // Get average of movement values over past 1 second
-  movements = movementValues.reduce((prev, curr) => prev+curr) / movementValues.length;
+  movements = movementValues.reduce((prev, curr) => prev+curr);
 
   movementDisplay.textContent = movements.toString()
 
