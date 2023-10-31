@@ -204,7 +204,7 @@ function lidBehaviour() {
   if (movements > lidLargeMovementThreshold.value) {
     lidposition = 0.0; // full open
   } else {
-    lidposition = lidServoClose.value/(lidServoClose.max * 1.0);
+    lidposition = lidServoHalfClose.value/(lidServoHalfClose.max * 1.0);
   }
 
   if (lidTimer) {
