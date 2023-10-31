@@ -184,8 +184,8 @@ let movements = Array(20).fill(0)
 
 function lidBehaviour() {
   // Calculate distance from last movement
-  var diffx = lastdots[index-1][0] - lastdots[index][0];
-  var diffy = lastdots[index-1][1] - lastdots[index][1];
+  var diffx = lastdots[-2][0] - lastdots[-1][0];
+  var diffy = lastdots[-2][1] - lastdots[-1][1];
   var distance = Math.sqrt(Math.pow(diffx + diffy, 2));
 
   // Pythagoras! 
