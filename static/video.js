@@ -194,12 +194,12 @@ function lidBehaviour() {
   movements.shift();
   movements.push(distance);
 
-  movementDisplay.textContent = movements[-1].toString();
+  movementDisplay.textContent = distance.toString();
 
   var totalmovements = movements.reduce((curr, prev) => Math.abs(prev-curr));
 
   // If there's some movement over the thresold
-  if (movements[-1] > lidLargeMovementThreshold.value) {
+  if (distance > lidLargeMovementThreshold.value) {
     // Open the lid
     lidposition = 0.15; // full open
 
