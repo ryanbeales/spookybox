@@ -207,6 +207,7 @@ function lidBehaviour() {
     if (!lidTimer) {
       clearTimeout(lidTimer);
       lidTimer = setTimeout(closeLid, 2000);
+    }
   }
 }
 
