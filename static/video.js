@@ -180,28 +180,25 @@ const movementDisplay = document.querySelector('#movementValue');
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
 let lidposition = 1.0 // closed by default
 let lidTimer = null
+let movements = Array(20).fill(0)
 
 function lidBehaviour() {
-  // Create an array of x,y diffs from the last 10 frames processed
-  let movementValues = lastdots.slice(-10).map((curr, index, array) => {
-    // Skip the first element, since it will be garbage
-    if (index > 0) {
-      var diffx = array[index-1][0] - array[index][0];
-      var diffy = array[index-1][1] - array[index][1];
-      
-      // Pythagoras! 
-      distance = Math.sqrt(Math.pow(diffx + diffy, 2));
+  // Calculate distance from last movement
+  var diffx = lastdots[index-1][0] - lastdots[index][0];
+  var diffy = lastdots[index-1][1] - lastdots[index][1];
+  var distance = Math.sqrt(Math.pow(diffx + diffy, 2));
 
-      return distance;
-    }
-  });
-  movementValues.shift();
-  // Get average of movement values over past 1 second
-  movements = movementValues.reduce((prev, curr) => prev+curr);
+  // Pythagoras! 
+  distance = Math.sqrt(Math.pow(diffx + diffy, 2));
 
-  movementDisplay.textContent = movements.toString();
+  movements.shift();
+  movements.push(distance);
 
-  if (movements > lidLargeMovementThreshold.value) {
+  movementDisplay.textContent = movements[-1].toString();
+
+  var totalmovements = movements.reduce((curr, prev) => Math.abs(prev-curr));
+
+  if (movements[-1] > lidLargeMovementThreshold.value and totalmovements > 5) {
     lidposition = 0.15; // full open
   } else {
     if (!lidTimer) {
