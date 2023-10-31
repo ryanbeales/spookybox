@@ -198,13 +198,18 @@ function lidBehaviour() {
 
   var totalmovements = movements.reduce((curr, prev) => Math.abs(prev-curr));
 
-  if (movements[-1] > lidLargeMovementThreshold.value && totalmovements > 5) {
+  // If there's some movement over the thresold
+  if (movements[-1] > lidLargeMovementThreshold.value) {
+    // Open the lid
     lidposition = 0.15; // full open
-  } else {
+
+    // Then check if a timer has been set already to close the lid
     if (!lidTimer) {
+      // Clear the existing timer
       clearTimeout(lidTimer);
-      lidTimer = setTimeout(closeLid, 2000);
     }
+    // Set a new timer to close the lid 2 seconds after any movements.
+    lidTimer = setTimeout(closeLid, 2000);
   }
 }
 
