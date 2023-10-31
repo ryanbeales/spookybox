@@ -204,7 +204,7 @@ function lidBehaviour() {
     lidposition = 0.15; // full open
 
     // Then check if a timer has been set already to close the lid
-    if (!lidTimer) {
+    if (lidTimer) {
       // Clear the existing timer
       clearTimeout(lidTimer);
     }
