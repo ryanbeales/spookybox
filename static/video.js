@@ -179,6 +179,7 @@ const movementDisplay = document.querySelector('#movementValue');
 
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
 let lidposition = 1.0 // closed by default
+let lidTimer = null
 
 function lidBehaviour() {
   // Create an array of x,y diffs from the last 10 frames processed
@@ -198,15 +199,22 @@ function lidBehaviour() {
   // Get average of movement values over past 1 second
   movements = movementValues.reduce((prev, curr) => prev+curr);
 
-  movementDisplay.textContent = movements.toString()
+  movementDisplay.textContent = movements.toString();
 
-  if (movements < lidSmallMovementThreshold.value) {
-    lidposition = lidServoClose.value/(lidServoClose.max * 1.0)
-  } else if (movements > lidLargeMovementThreshold.value) {
-    lidposition = 0.0 // full open
+  if (movements > lidLargeMovementThreshold.value) {
+    lidposition = 0.0; // full open
   } else {
-    lidposition = lidServoHalfClose.value/(lidServoHalfClose.max * 1.0)
+    lidposition = lidServoClose.value/(lidServoClose.max * 1.0);
   }
+
+  if (lidTimer) {
+    clearTimeout(lidTimer);
+  }
+  lidTimer = setTimeout(closeLid, 2000);
+}
+
+function closeLid() {
+  lidposition = lidServoClose.value/(lidServoClose.max * 1.0);
 }
 
 //
