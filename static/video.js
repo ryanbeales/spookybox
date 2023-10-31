@@ -202,17 +202,17 @@ function lidBehaviour() {
   movementDisplay.textContent = movements.toString();
 
   if (movements > lidLargeMovementThreshold.value) {
-    lidposition = 0.2; // full open
+    lidposition = 0.15; // full open
   } else {
-    if (lidTimer) {
+    if (!lidTimer) {
       clearTimeout(lidTimer);
-    }
-    lidTimer = setTimeout(closeLid, 2000);
+      lidTimer = setTimeout(closeLid, 2000);
   }
 }
 
 function closeLid() {
   lidposition = lidServoClose.value/(lidServoClose.max * 1.0);
+  lidTimer = null
 }
 
 //
