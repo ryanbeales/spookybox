@@ -169,13 +169,15 @@ const verticalSlider = document.querySelector('#verticalSlider');
 const horizontalSlider = document.querySelector('#horizontalSlider');
 const lidSlider = document.querySelector('#lidSlider');
 
-const lidServoHalfClose = document.querySelector('#lidServoHalfClose');
+const lidAutoEnabled = document.querySelector('#lidAutoEnabled');
+
+const lidServoOpen = document.querySelector('#lidServoOpen');
 const lidServoClose = document.querySelector('#lidServoClose');
 
-const lidSmallMovementThreshold = document.querySelector('#lidSmallMovementThreshold');
-const lidLargeMovementThreshold = document.querySelector('#lidLargeMovementThreshold');
+const lidMovementThreshold = document.querySelector('#lidMovementThreshold');
 
 const movementDisplay = document.querySelector('#movementValue');
+const lidState = document.querySelector('#lidState');
 
 // Detect when there is movement, then open the lid, setTimeout to close the lid again.
 let lidposition = 1.0 // closed by default
@@ -183,38 +185,41 @@ let lidTimer = null
 let movements = Array(20).fill(0)
 
 function lidBehaviour() {
-  // Calculate distance from last movement
-  var diffx = lastdots[9][0] - lastdots[10][0];
-  var diffy = lastdots[9][1] - lastdots[10][1];
-  var distance = Math.sqrt(Math.pow(diffx + diffy, 2));
+  if (lidAutoEnabled.checked) {
+    lidposition = lidServoOpen.value/(lidServoOpen.max * 1.0); // full open
+    lidState.textContent = 'Manual';
+  } else {
+    // Calculate distance from last movement
+    var diffx = lastdots[9][0] - lastdots[10][0];
+    var diffy = lastdots[9][1] - lastdots[10][1];
+    var distance = Math.sqrt(Math.pow(diffx + diffy, 2));
 
-  // Pythagoras! 
-  distance = Math.sqrt(Math.pow(diffx + diffy, 2));
+    // Pythagoras! 
+    distance = Math.sqrt(Math.pow(diffx + diffy, 2));
 
-  movements.shift();
-  movements.push(distance);
+    movements.shift();
+    movements.push(distance);
 
-  movementDisplay.textContent = distance.toString();
+    movementDisplay.textContent = distance.toString();
 
-  var totalmovements = movements.reduce((curr, prev) => Math.abs(prev-curr));
+    var totalmovements = movements.reduce((curr, prev) => Math.abs(prev-curr));
 
-  // If there's some movement over the thresold
-  if (distance > lidLargeMovementThreshold.value) {
-    // Open the lid
-    lidposition = 0.15; // full open
+    // If there's some movement over the thresold
+    if (distance > lidMovementThreshold.value) {
+      // Open the lid
+      lidposition = lidServoOpen.value/(lidServoOpen.max * 1.0); // full open
+      lidState.textContent = 'Open';
 
-    // Then check if a timer has been set already to close the lid
-    if (lidTimer) {
-      // Clear the existing timer
       clearTimeout(lidTimer);
+      // Set a new timer to close the lid 2 seconds after any movements.
+      lidTimer = setTimeout(closeLid, 2000);
     }
-    // Set a new timer to close the lid 2 seconds after any movements.
-    lidTimer = setTimeout(closeLid, 2000);
-  }
+  } 
 }
 
 function closeLid() {
   lidposition = lidServoClose.value/(lidServoClose.max * 1.0);
+  lidState.textContent = 'Closed';
   lidTimer = null
 }
 
@@ -227,21 +232,20 @@ function sendToSpookyBox() {
   // where each value is a number between 0 and 1 representing the fraction of the total
   // amount of movement the servo has.
 
-  var locationx = 0.0 // 1.0 is right, 0.0 is left from the boxes point of view
-  var locationy = 0.0 // 0.0 is up, 1.0 is down
-  var lid = 1.0 // 1.0 is closed, 0.0 is open.
+  var locationx = 0.0; // 1.0 is right, 0.0 is left from the boxes point of view
+  var locationy = 0.0; // 0.0 is up, 1.0 is down
+  var lid = 1.0; // 1.0 is closed, 0.0 is open.
 
   if (controlsEnabled.checked == true) {
-    locationx = 1.0 - (horizontalSlider.value / (horizontalSlider.max * 1.0))
-    locationy = verticalSlider.value / (verticalSlider.max * 1.0)
-    lid = lidSlider.value / (lidSlider.max * 1.0)
+    locationx = 1.0 - (horizontalSlider.value / (horizontalSlider.max * 1.0));
+    locationy = verticalSlider.value / (verticalSlider.max * 1.0);
   } else {
     // X is reversed, Y is not
-    locationx = (renderedcanvas.width - lastdots[lastdots.length-1][0]) / renderedcanvas.width
-    locationy = lastdots[lastdots.length-1][1] / renderedcanvas.height
-    lid = lidposition
+    locationx = (renderedcanvas.width - lastdots[lastdots.length-1][0]) / renderedcanvas.width;
+    locationy = lastdots[lastdots.length-1][1] / renderedcanvas.height;
   }
 
+  lid = lidposition;
   socket.emit('faceposition', [locationx, locationy, lid])
 }
   
