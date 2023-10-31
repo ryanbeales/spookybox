@@ -198,7 +198,7 @@ function lidBehaviour() {
 
   var totalmovements = movements.reduce((curr, prev) => Math.abs(prev-curr));
 
-  if (movements[-1] > lidLargeMovementThreshold.value and totalmovements > 5) {
+  if (movements[-1] > lidLargeMovementThreshold.value && totalmovements > 5) {
     lidposition = 0.15; // full open
   } else {
     if (!lidTimer) {
