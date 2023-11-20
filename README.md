@@ -3,11 +3,11 @@ It's a spooky box version 3! For 2023 it's no longer in a pumpkin, but back in i
 
 This is some face tracking which is then used as an input to drive some servos that direct some fake plastic eyeballs to follow people around. All this to hopefully spook our Halloween vistors. Success rate so far is about 10% of kids spooked in both 2021 and 2022. 2023 upped this to a better 30%. 2024 really needs to terrify people...
 
-Here's a video of it working:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ynq5hFvTToc?si=sWmAWYoa3XNeTq9R&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+Here's a video of it working (click on the image to play it):
+<br>[![SpookyboxV3 outside](http://img.youtube.com/vi/ynq5hFvTToc/0.jpg)](http://www.youtube.com/watch?<br>v=ynq5hFvTToc)<br>
 
 For 2023 it was mostly UI improvementsm so here's a video of the UI:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/F0AnC8ocOAw?si=0ItB65YGGd9QZK_W" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<br>[![SpookyboxV3 inside](http://img.youtube.com/vi/F0AnC8ocOAw/0.jpg)](http://www.youtube.com/watch?v=F0AnC8ocOAw)<br>
 
 The red dot will aim where it finds a face. Posenet is pretty good at finding faces, what is not good is me trying to make a single point out of that. It should be finding the top left corner of the bounding box of the face it finds. It's not quite doing that. But better than nothing! For 2023 i've added some manual controls and some tuning for the lid servo open/close points so we can get that satisfying slap when it closes. There's a manual lid control option which will keep the eyes tracking whatever it finds.
 
